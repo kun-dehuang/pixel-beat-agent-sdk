@@ -8,7 +8,6 @@ import { AxiosError } from "axios";
 import { AIService } from "../services/ai.service";
 import { MemoryService, PhotoAnalysis, RetrievalPath, NarrativeAngle } from "../services/memory.service";
 import { userMemoryService } from "../services/user-memory.service";
-import { getMem0Middleware } from "../services/mem0.middleware";
 import { memorySelectService } from "../services/memory-select.service";
 
 // 工具返回格式
