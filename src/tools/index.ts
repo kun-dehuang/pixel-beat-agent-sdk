@@ -447,7 +447,10 @@ ${args.contentType === "story"
     const deepEngagementRate = total >= 7 ? 0.75 : (total >= 6 ? 0.5 : 0.3);
 
     // 生成评论类型预测
-    const commentTypes = this.predictCommentTypes(angleType, args.story);
+    const commentTypes = this.predictCommentTypes(angleType, {
+      title: args.story.title || '',
+      body: args.story.body || ''
+    });
 
     const result = {
       success: true,
@@ -477,7 +480,10 @@ ${args.contentType === "story"
       recommendation: {
         should_use: total >= 7,
         confidence: total / 10,
-        improvement_suggestions: this.getImprovementSuggestions(scores, args.story)
+        improvement_suggestions: this.getImprovementSuggestions(scores, {
+          title: args.story.title || '',
+          body: args.story.body || ''
+        })
       }
     };
 
@@ -605,10 +611,20 @@ ${args.contentType === "story"
    */
   private handleError(error: unknown, operation: string): ToolResult {
     const axiosError = error as AxiosError;
-    const message = axiosError?.response?.data
-      || axiosError?.message
-      || error instanceof Error ? error.message
-      : "Unknown error";
+    let message: string;
+
+    if (axiosError?.response?.data) {
+      message = typeof axiosError.response.data === 'string'
+        ? axiosError.response.data
+        : JSON.stringify(axiosError.response.data);
+    } else if (axiosError?.message) {
+      message = axiosError.message;
+    } else if (error instanceof Error) {
+      message = error.message;
+    } else {
+      message = "Unknown error";
+    }
+
     return {
       content: [{
         type: "text",

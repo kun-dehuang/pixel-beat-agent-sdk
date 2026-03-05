@@ -1,6 +1,6 @@
-import * as express from 'express';
-import { ToolHandlers, MemorySelectAddInput, MemorySelectSelectWithAnswerInput } from './tools';
-import * as cors from 'cors';
+import express, { Request, Response } from 'express';
+import cors from 'cors';
+import { ToolHandlers } from './tools';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -10,23 +10,23 @@ app.use(cors());
 app.use(express.json());
 
 // 健康检查端点
-app.get('/health', (req, res) => {
+app.get('/health', (req: Request, res: Response) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
 // Memory Select API 端点
-app.post('/api/memory/add', async (req, res) => {
+app.post('/api/memory/add', async (req: Request, res: Response) => {
   try {
-    const result = await toolHandlers.memorySelectAdd(req.body as MemorySelectAddInput);
+    const result = await toolHandlers.memorySelectAdd(req.body);
     res.json(JSON.parse(result.content[0].text));
   } catch (error) {
     res.status(500).json({ success: false, error: error instanceof Error ? error.message : 'Unknown error' });
   }
 });
 
-app.post('/api/memory/select-with-answer', async (req, res) => {
+app.post('/api/memory/select-with-answer', async (req: Request, res: Response) => {
   try {
-    const result = await toolHandlers.memorySelectSelectWithAnswer(req.body as MemorySelectSelectWithAnswerInput);
+    const result = await toolHandlers.memorySelectSelectWithAnswer(req.body);
     res.json(JSON.parse(result.content[0].text));
   } catch (error) {
     res.status(500).json({ success: false, error: error instanceof Error ? error.message : 'Unknown error' });
@@ -34,7 +34,7 @@ app.post('/api/memory/select-with-answer', async (req, res) => {
 });
 
 // 根路径信息
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
   res.json({
     name: 'Pixel Beat API',
     version: '1.0.0',

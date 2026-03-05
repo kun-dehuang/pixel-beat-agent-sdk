@@ -375,3 +375,127 @@ export interface MemoryTraceOutput {
   };
   error?: string;
 }
+
+// ==================== V3 双层架构类型 ====================
+
+export interface AgentV3Input {
+  userId: string;
+  photos: PhotoInput[];
+  existingPersona?: any;
+  preferredStyle?: 'natural' | 'literary' | 'humorous';
+}
+
+export interface AgentV3Output {
+  status: 'success' | 'error' | 'pending_confirmation';
+  story?: Story;
+  storyPreview?: StoryPreview;
+  alternatives?: Story[];
+  photoAnalysis?: any;
+  memoryConnections?: any[];
+  reasoning?: {
+    memoryDecision: string;
+    memoryUsed: boolean;
+    strategyChoice: string;
+    strategyReason: string;
+  };
+  engagementScore?: number;
+  expertScores?: ExpertScores;
+  error?: string;
+  debug?: {
+    agentSteps: string[];
+    stepDetails?: Array<{
+      turn: number;
+      tool: string;
+      startTime: number;
+      durationMs: number;
+      inputTokens: number;
+      outputTokens: number;
+      input: any;
+      output: string;
+    }>;
+    totalTokens: number;
+    totalLatencyMs: number;
+    agentTurns: number;
+  };
+}
+
+export interface Task {
+  id: string;
+  type: string;
+  status: 'pending' | 'in_progress' | 'completed' | 'failed';
+  input: any;
+  output?: any;
+  error?: string;
+}
+
+export interface TaskResult {
+  success: boolean;
+  data?: any;
+  error?: string;
+}
+
+export type ConfirmationState = 'pending' | 'approved' | 'rejected';
+
+// ==================== 工具输入类型（从 tools/index.ts 导出）====================
+
+export interface AnalyzePhotosInput {
+  images: Array<{
+    base64: string;
+    mimeType?: string;
+    exif?: any;
+  }>;
+  timeRange?: string;
+  protagonistHints?: string;
+  exifContext?: string;
+}
+
+export interface GeneratePersonaInput {
+  photoAnalysis: string;
+  existingPersona?: string;
+  mode?: 'full' | 'incremental';
+}
+
+export interface GenerateStoryInput {
+  personaSummary: string;
+  photoAnalysis: string;
+  styleId?: 'natural' | 'literary' | 'humorous';
+  avoidSimilarTo?: string;
+}
+
+export interface EvaluateQualityInput {
+  contentType: 'story' | 'persona';
+  content: string;
+  originalPhotos?: string;
+}
+
+export interface RetrieveMemoriesInput {
+  photoAnalysis: {
+    entities?: string[];
+    people?: string[];
+    location?: string;
+    emotion?: string;
+    activities?: string[];
+  };
+  paths?: string[];
+  topK?: number;
+  minConfidence?: number;
+}
+
+export interface PredictEngagementInput {
+  story: {
+    title: string;
+    body: string;
+    style?: string;
+  };
+  narrativeAngle?: {
+    angle_type: string;
+    confidence: number;
+    description?: string;
+  };
+  hasOldPhoto?: boolean;
+  associatedMemories?: Array<{
+    id: string;
+    content: string;
+    emotion?: string;
+  }>;
+}
