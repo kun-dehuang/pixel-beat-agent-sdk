@@ -1,0 +1,56 @@
+{
+  "name": "pixel-beat-agent-sdk",
+  "version": "1.0.0",
+  "description": "Pixel Beat Agent SDK - 照片分析与故事生成 Agent 框架",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/index.ts",
+    "start": "node dist/server.js",
+    "dev:server": "ts-node src/server.ts",
+    "test": "ts-node tests/run-agent.test.ts",
+    "test:v3": "ts-node tests/v3-sdk.test.ts",
+    "test:memory-trace": "ts-node tests/memory-trace.test.ts",
+    "lint": "eslint src --ext .ts"
+  },
+  "keywords": [
+    "ai",
+    "agent",
+    "claude",
+    "anthropic",
+    "photo-analysis",
+    "story-generation",
+    "vlm"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.0",
+    "@google/generative-ai": "^0.21.0",
+    "axios": "^1.6.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.0",
+    "handlebars": "^4.7.8",
+    "uuid": "^10.0.0",
+    "yaml": "^2.5.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.0",
+    "@types/express": "^4.17.0",
+    "@types/node": "^22.0.0",
+    "@types/uuid": "^10.0.0",
+    "typescript": "^5.9.3",
+    "ts-node": "^10.9.2"
+  },
+  "peerDependencies": {
+    "sharp": "^0.34.5"
+  },
+  "peerDependenciesMeta": {
+    "sharp": {
+      "optional": true
+    }
+  }
+}
